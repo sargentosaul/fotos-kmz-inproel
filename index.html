@@ -227,6 +227,9 @@ const BORDE_MINIATURA = 5;         // marco blanco
 const CALIDAD_MINIATURA = 0.8;
 const ESCALA_MINIATURA = 1.3;      // 1.0 = icono normal de Google Earth
 const EXTENSIONES = /\.(jpe?g|png)$/i;
+const ANCHO_BALLOON = 600;         // ancho de la foto en el globo de Google Earth
+const ANCHO_BALLOON_GRANDE = 1000; // al pincharla
+const URL_PAGINA = "https://sargentosaul.github.io/fotos-kmz-inproel/";
 
 const $ = (id) => document.getElementById(id);
 
@@ -471,15 +474,18 @@ function kmlPlacemarks(lista, inicio) {
             <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
           </IconStyle>
           <LabelStyle><scale>0</scale></LabelStyle>
+          <BalloonStyle><text><![CDATA[$[description]]]></text></BalloonStyle>
         </Style>
         <description><![CDATA[
           <b>Foto ${i}</b><br/>
           ${escaparXml(r.relativa)}<br/>
           ${formatoFecha(r.fecha)}<br/>
-          <img src="fotos/${r.archivoKmz}" width="600"/><br/>
-          <a href="fotos/${r.archivoKmz}">Ampliar / descargar foto</a><br/>
-          Cómo llegar: <a href="https://www.google.com/maps/dir/?api=1&destination=${ll}">A aquí</a>
-          - <a href="https://www.google.com/maps/dir/?api=1&origin=${ll}">De aquí</a>
+          <img src="fotos/${r.archivoKmz}" width="${ANCHO_BALLOON}" style="cursor:pointer" title="Pincha para agrandar o achicar"
+               onclick="this.width = (this.width > ${ANCHO_BALLOON}) ? ${ANCHO_BALLOON} : ${ANCHO_BALLOON_GRANDE};"/><br/>
+          <small>Pincha la foto para agrandarla o achicarla.</small><br/>
+          Cómo llegar (Google Maps): <a href="https://www.google.com/maps/dir/?api=1&destination=${ll}">A aquí</a>
+          - <a href="https://www.google.com/maps/dir/?api=1&origin=${ll}">De aquí</a><br/>
+          <small>Para descargar la foto: abre este KMZ en <a href="${URL_PAGINA}">${URL_PAGINA}</a></small>
         ]]></description>
         <Point>
           <coordinates>${r.lon},${r.lat},0</coordinates>
